@@ -1,0 +1,324 @@
+<html>
+
+<style>
+
+h1 {
+  text-decoration: underline;
+}
+
+div.a {
+	text-align: center;
+}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 35px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 50px;
+  background: #292c33ff;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 50px;
+  background: #292c33ff;
+  cursor: pointer;
+}
+
+.button {
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 19px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button1 {
+  background-color: gray;
+  color: white;
+  /*border: 2px solid #008CBA;*/
+}
+
+.button1:hover {
+  background-color: black;
+  color: white;
+}
+
+.button1 {border-radius: 10%;}
+
+</style>
+
+
+  <head>
+
+    <title>Slice and Dice</title>
+
+    <script src="jquery-3.5.1.js"></script>
+
+  </head>
+
+  <body>
+
+      <p id ="pIncorrect"></p>
+
+      <div class="a">
+
+      <h1>Slice and Dice</h1>
+
+      <h2 id="favorite">What's your favorite kind of pie? Apple right?</h2>
+
+    	<input type="text" placeholder="Enter pie of choice" id="pieTextInput" name="tta"/>
+
+    	<button id="pieButton" onclick="submitPie()">Slice!</button>
+
+    </div>
+
+    <div id="rangeDiv" class="a" style="display:none;">
+      <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+      <p id="value">Value: <span id="demo"></span></p>
+    </div>
+
+    <script>
+		var bankRollVal = 1.0;
+
+    function showImg(src, width, height, alt) {
+            var img = document.createElement("img");
+            img.src = src;
+            img.width = width;
+            img.height = height;
+            img.alt = alt;
+            document.body.appendChild(img);
+
+            var br = document.createElement("br");
+            document.body.appendChild(br);
+
+						var moneyMouth = document.createElement("h3");
+						var moneyMouthText = document.createTextNode("Put your slices where your mouth is and I don't mean eat them...");
+						moneyMouth.id = "moneyMouth";
+						moneyMouth.appendChild(moneyMouthText);
+						document.body.appendChild(moneyMouth).style.textAlign = "center";
+        }
+
+		function showBankRoll(){
+			var bankRollP = document.createElement("p");
+			var bankRollPText = document.createTextNode("Slices: "); //+ bankRollVal);
+			bankRollP.id = "bankRollP";
+			bankRollP.appendChild(bankRollPText);
+			document.body.appendChild(bankRollP).style.textAlign = "center";
+
+			var bankRollSpan = document.createElement("span");
+			bankRollSpan.id = "bankRollSpan";
+			document.getElementById("bankRollP").appendChild(bankRollSpan);
+			bankRollSpan.innerHTML = bankRollVal;
+		}
+
+		function showRange(){
+      var slider = document.createElement("input");
+      slider.type = "range";
+      slider.className = "slider";
+      slider.id = "myRange2";
+      slider.min = "1";
+      slider.max = "99";
+      slider.value = "50";
+      document.body.appendChild(slider);
+
+			var rollAbove = document.createElement("p");
+      var rollAboveText = document.createTextNode("Roll above: ");
+      rollAbove.id = "rAbove";
+			rollAbove.className = "a";
+      rollAbove.appendChild(rollAboveText);
+      document.body.appendChild(rollAbove).style.textAlign = "center";
+
+      var valueSpan = document.createElement("SPAN");
+      valueSpan.id = "value2";
+			document.getElementById("rAbove").appendChild(valueSpan);
+
+      var slider2 = document.getElementById("myRange2");
+      var output = document.getElementById("value2");
+      output.innerHTML = slider2.value;
+
+      //slider2.oninput = function() {
+      //output.innerHTML = this.value;
+			//}
+
+			var multiplierP = document.createElement("p");
+      var multiplierText = document.createTextNode("Multiplier: ");
+      multiplierP.id = "multiplierP";
+			multiplierP.className = "a";
+      multiplierP.appendChild(multiplierText);
+      document.body.appendChild(multiplierP).style.textAlign = "center";
+
+			var multiplierVal = document.createElement("span");
+			multiplierVal.id = "multiplierVal";
+			document.getElementById("multiplierP").appendChild(multiplierVal);
+			multiplierVal.innerHTML = slider2.value * 0.04;
+
+			slider2.oninput = function() {
+      output.innerHTML = this.value;
+			multiplierVal.innerHTML = Math.round((slider2.value * 0.04) * 100) / 100;
+			}
+
+			//var multiplier = slider2 * 0.04;
+      //var multiplierOut = document.getElementById("multiplierVal");
+      //multiplierOut.innerHTML = multiplier.value;
+
+
+      //multiplier.oninput = function() {
+			//output.innherHTML = this.value;
+			//multiplierOut.innerHTML = this.value * 0.04;
+			//}
+    }
+
+		function makeButton(){
+			var buttonDiv = document.createElement("div");
+			buttonDiv.className = "a";
+			buttonDiv.id = "buttonDiv";
+			document.body.appendChild(buttonDiv);
+
+			var bet = document.createElement("button");
+			bet.id = "betBtn";
+			bet.innerHTML = "Bet";
+			bet.className = "button button1";
+			bet.onclick = function placeBet(){
+				shakeDice();
+			};
+			document.getElementById("buttonDiv").appendChild(bet);
+
+			var diceDiv = document.createElement("div");
+			diceDiv.className = "a";
+			diceDiv.id = "diceDiv";
+			document.body.appendChild(diceDiv);
+
+			var diceValue = document.createElement("p");
+			//var diceValueText = document.createTextNode("00");
+			diceValue.id = "diceValue";
+			//diceValue.appendChild(diceValueText);
+			document.getElementById("diceDiv").appendChild(diceValue);
+
+			var winOrLose = document.createElement("p");
+			//winOrLose.classname = "a";
+			winOrLose.id = "winOrLose";
+			document.body.appendChild(winOrLose).style.textAlign = "center";
+		}
+
+		function shakeDice(){
+			var rollString = "You rolled: ";
+			var diceRoll = Math.floor(Math.random() * 100);
+			var sliderVal = document.getElementById("myRange2").value;
+			document.getElementById("diceValue").innerHTML = rollString + diceRoll;
+
+			var multiplier = document.getElementById("multiplierVal").value;
+
+			if (diceRoll > sliderVal){
+				//alert("You won!");
+				bankRollVal = bankRollVal + (document.getElementById("myRange2").value * 0.04);
+				bankRollSpan.innerHTML = bankRollVal;
+
+				document.getElementById("winOrLose").innerHTML = "You won!";
+
+			}else{
+				//alert("You lost...")
+				bankRollVal = bankRollVal - (document.getElementById("myRange2").value * 0.04);
+				bankRollSpan.innerHTML = bankRollVal;
+
+				document.getElementById("winOrLose").innerHTML = "You lost...";
+
+				if(bankRollVal <= 0){
+					document.getElementById("betBtn").remove();
+					bankRollVal = 0;
+					bankRollSpan.innerHTML = bankRollVal;
+					document.getElementById("winOrLose").innerHTML = "You lost it all! Better learn to bake on your own.";
+				}
+
+
+			}
+
+		}
+
+    function incorrect(){
+          document.getElementById("pIncorrect").remove();
+          var p = document.createElement("p");
+        	var phrase = document.getElementById("pieTextInput").value;
+        	var text = document.createTextNode("Seriously? " + phrase.charAt(0).toUpperCase() + phrase.slice(1) + "? Too bad you don't like apple...");
+        	p.appendChild(text);
+        	document.body.appendChild(p).style.textAlign = "center";
+          p.setAttribute("id", "pIncorrect");
+        }
+
+        function submitPie(){
+        	let pieChoice = document.getElementById("pieTextInput").value;
+					let a1 = "apple";
+					let a2 = "Apple";
+					let c1 = "cheesecake";
+					let c2 = "Cheesecake";
+					let p1 = "pumpkin";
+          let p2 = "Pumpkin";
+
+        	if (pieChoice === p1 || pieChoice === p2){
+            document.getElementById("pIncorrect").remove();
+            document.getElementById("favorite").remove();
+            document.getElementById("pieTextInput").remove();
+            document.getElementById("pieButton").remove();
+
+            var goodChoiceH2 = document.createElement("h2");
+        		var goodChoiceText = document.createTextNode("Yeah! That's what I'm talking about! Mmm, have a slice...now dice!");
+        		goodChoiceH2.appendChild(goodChoiceText);
+        		document.body.appendChild(goodChoiceH2).style.textAlign = "center";
+
+        		showImg("640px-Pumpkin_Pie.jpg", 640, 426, "PUMKPKIN PIE!");
+
+						showBankRoll();
+
+            showRange();
+
+						makeButton();
+
+          }else if(pieChoice === a1 || pieChoice === a2){
+						document.getElementById("pIncorrect").remove();
+	          var p = document.createElement("p");
+	        	var phrase = document.getElementById("pieTextInput").value;
+	        	var text = document.createTextNode("How original. Next I bet you'll say cheesecake.");
+	        	p.appendChild(text);
+	        	document.body.appendChild(p).style.textAlign = "center";
+	          p.setAttribute("id", "pIncorrect");
+          }else if(pieChoice === c1 || pieChoice === c2){
+						document.getElementById("pIncorrect").remove();
+	          var p = document.createElement("p");
+	        	var phrase = document.getElementById("pieTextInput").value;
+	        	var text = document.createTextNode("C'mon! Cheesecake can't even be a pie. It has the word cake right in it! Too bad you don't like pumpkin...");
+	        	p.appendChild(text);
+	        	document.body.appendChild(p).style.textAlign = "center";
+	          p.setAttribute("id", "pIncorrect");
+					}else{
+            incorrect();
+          }
+        }
+
+    </script>
+
+  </body>
+
+</html>
